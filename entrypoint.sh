@@ -7,7 +7,7 @@
 export PATH="/opt/google-cloud-sdk/bin:${PATH}"
 
 # Change current working directory to IaC live
-cd /code/live
+cd /code/live || exit
 
 # Pass any arguments
 exec "$@"
