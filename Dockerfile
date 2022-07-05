@@ -59,6 +59,7 @@ RUN addgroup -g ${GID} -S ${GROUP} \
 COPY --from=builder --chown=${USER}:${GROUP} /build/ /usr/local/bin/
 COPY --from=builder --chown=${USER}:${GROUP} /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=builder --chown=${USER}:${GROUP} /usr/local/bin/ /usr/local/bin/
+COPY --chown=${USER}:${GROUP} entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Install glibc compatibility for Alpine
 ARG GLIBC_VERSION=2.35-r0
@@ -76,3 +77,4 @@ RUN apk add --no-cache binutils curl \
 # Switch current user from root to a regular
 USER ${USER}
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
