@@ -1,3 +1,5 @@
+# The root terragrunt.hcl configuration
+# 
 locals {
   # automatically load account-level variables
   account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl", "fallback.hcl"))
@@ -16,9 +18,19 @@ locals {
   # automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl", "fallback.hcl"))
   env = local.environment_vars.locals.environment
-
-  name = "iac-terraform"
 }
+
+# Global parameters. These variables apply to all configurations in this
+# subfolder. These are automatically merged into the child terragrunt.hcl
+# config via the include block.
+# Configure root level variables that all resources can inherit. This is
+# especially helpful with multi-account configs where terraform_remote_state
+# data sources are placed directly into the modules.
+inputs = merge(
+  local.account_vars.locals,
+  local.region_vars.locals,
+  local.environment_vars.locals
+)
 
 generate "versions" {
   path = "_versions.tf"
@@ -95,40 +107,9 @@ terraform {
     }
   }
 
-  # Perform "init" before "plan" every time
+  # Execute "init" before "plan" every time
   before_hook "before_hook" {
     commands = ["plan"]
     execute = ["terraform", "init"]
   }
 }
-
-// # Configure Terragrunt to automatically store tfstate files in an S3 bucket
-// remote_state {
-//   backend = "s3"
-
-//   generate = {
-//     path = "backend.tf"
-//     if_exists = "overwrite_terragrunt"
-//   }
-//   config = {
-//     encrypt = true
-//     bucket = join("-", [local.name, state])
-//     key = "${path_relative_to_include()/terraform.tfstate}"
-//     region = local.aws_region_fallback
-//     skip_buclet_versioning = false
-//     profile = local.aws_profile_fallback
-//     dynamodb_table = "${local.name}-locks"
-//   }
-// }
-
-# Global parameters. These variables apply to all configurations in this
-# subfolder. These are automatically merged into the child terragrunt.hcl
-# config via the include block.
-# Configure root level variables that all resources can inherit. This is
-# especially helpful with multi-account configs where terraform_remote_state
-# data sources are placed directly into the modules.
-inputs = merge(
-  local.account_vars.locals,
-  local.region_vars.locals,
-  local.environment_vars.locals
-)
