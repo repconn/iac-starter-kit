@@ -15,8 +15,31 @@ locals {
 
   # automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl", "fallback.hcl"))
+  env = local.environment_vars.locals.environment
 
   name = "iac-terraform"
+}
+
+terraform {
+  # Create cache dir to store downloaded modules and dependencies
+  before_hook "before_cache" {
+    commands = [get_terraform_command()]
+    execute = ["mkdir", "-p", abspath("${get_parent_terragrunt_dir()}../_cache")]
+  }
+
+  # Tell Terraform to use cache directory
+  extra_arguments "cache" {
+    commands = [get_terraform_command()]
+    env_vars = {
+      TF_PLUGIN_CACHE_DIR = abspath("${get_parent_terragrunt_dir()}/../_cache")
+    }
+  }
+
+  # Perform "init" before "plan" every time
+  before_hook "before_hook" {
+    commands = ["plan"]
+    execute = ["terraform", "init"]
+  }
 }
 
 generate "versions" {
