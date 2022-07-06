@@ -14,7 +14,7 @@ max_line_length = 120
 charset = utf-8
 
 # 2 space indentation
-[*.hcl]
+[*.{hcl,tf}]
 indent_size = 2
 indent_style = space
 

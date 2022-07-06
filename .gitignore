@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/linux,osx,terraform
-# Edit at https://www.toptal.com/developers/gitignore?templates=linux,osx,terraform
+# Created by https://gitignore.io/api/linux,osx,terraform
+# Edit at https://gitignore.io?templates=linux,osx,terraform
 
 ### Linux ###
 *~
@@ -23,7 +23,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -80,4 +81,11 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# End of https://www.toptal.com/developers/gitignore/api/linux,osx,terraform
+# Terragrunt files
+.terragrunt-cache
+.terraform.lock.hcl
+_cache
+_profiders.tf
+_versions.tf
+
+# End of https://gitignore.io/api/linux,osx,terraform
