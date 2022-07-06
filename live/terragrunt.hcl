@@ -20,28 +20,6 @@ locals {
   name = "iac-terraform"
 }
 
-terraform {
-  # Create cache dir to store downloaded modules and dependencies
-  before_hook "before_cache" {
-    commands = [get_terraform_command()]
-    execute = ["mkdir", "-p", abspath("${get_parent_terragrunt_dir()}../_cache")]
-  }
-
-  # Tell Terraform to use cache directory
-  extra_arguments "cache" {
-    commands = [get_terraform_command()]
-    env_vars = {
-      TF_PLUGIN_CACHE_DIR = abspath("${get_parent_terragrunt_dir()}/../_cache")
-    }
-  }
-
-  # Perform "init" before "plan" every time
-  before_hook "before_hook" {
-    commands = ["plan"]
-    execute = ["terraform", "init"]
-  }
-}
-
 generate "versions" {
   path = "_versions.tf"
   if_exists = "overwrite_terragrunt"
@@ -71,24 +49,57 @@ generate "providers" {
       region = "${local.aws_region_fallback}"
       profile = "${local.aws_profile_fallback}"
       insecure = false
-      default_tags = {
-        Terraform = true
+      default_tags {
+        tags = {
+          Terraform = true
+        }
       }
-      # skip credentials validation via the STS API
-      skip_credentials_validation = true
-      # skip validating the region
-      skip_region_validation = true
-      # skip the AWS Metadata API check
-      skip_metadata_api_check = true
-      # skip getting the supported EC2 platforms
-      skip_get_ec2_platforms = true
-
     }
     provider "google" {
       region = "${local.gcp_region_fallback}"
       project = "${local.gcp_project_fallback}"
     }
   EOF
+}
+
+terraform {
+  # Force Terraform to keep trying to acquire a lock for
+  # up to 10 minutes
+  extra_arguments "retry_lock" {
+    commands = [
+      "init",
+      "apply",
+      "refresh",
+      "import",
+      "plan",
+      "taint",
+      "untaint"
+    ]
+
+    arguments = [
+      "-lock-timeout=10m"
+    ]
+  }
+
+  # Create cache dir to store downloaded modules and dependencies
+  before_hook "before_cache" {
+    commands = [get_terraform_command()]
+    execute = ["mkdir", "-p", abspath("${get_parent_terragrunt_dir()}/../_cache")]
+  }
+
+  # Tell Terraform to use cache directory
+  extra_arguments "cache" {
+    commands = [get_terraform_command()]
+    env_vars = {
+      TF_PLUGIN_CACHE_DIR = abspath("${get_parent_terragrunt_dir()}/../_cache")
+    }
+  }
+
+  # Perform "init" before "plan" every time
+  before_hook "before_hook" {
+    commands = ["plan"]
+    execute = ["terraform", "init"]
+  }
 }
 
 // # Configure Terragrunt to automatically store tfstate files in an S3 bucket
@@ -101,7 +112,7 @@ generate "providers" {
 //   }
 //   config = {
 //     encrypt = true
-//     bucket = "${local.name}-state"
+//     bucket = join("-", [local.name, state])
 //     key = "${path_relative_to_include()/terraform.tfstate}"
 //     region = local.aws_region_fallback
 //     skip_buclet_versioning = false
@@ -110,3 +121,14 @@ generate "providers" {
 //   }
 // }
 
+# Global parameters. These variables apply to all configurations in this
+# subfolder. These are automatically merged into the child terragrunt.hcl
+# config via the include block.
+# Configure root level variables that all resources can inherit. This is
+# especially helpful with multi-account configs where terraform_remote_state
+# data sources are placed directly into the modules.
+inputs = merge(
+  local.account_vars.locals,
+  local.region_vars.locals,
+  local.environment_vars.locals
+)
