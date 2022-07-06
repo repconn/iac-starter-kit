@@ -9,16 +9,10 @@ ARG TF_VER=1.2.4
 # terragrunt
 ARG TG_VER=0.38.3
 
-# Adjust user/group and their id's from outside
-# to prevent possible permission conflicts
-ARG GID=1000
-ARG UID=1000
+# Run the container as a non-root user
 ARG GROUP=user
 ARG USER=user
-
-# Create a regular user to run container in non-root mode
-RUN addgroup -g ${GID} -S ${GROUP} \
- && adduser -h /home/${USER} -s /bin/bash -G ${GROUP} -u ${UID} -D ${USER}
+RUN adduser -s /bin/bash -D ${USER}
 
 # Working directory
 WORKDIR /usr/local/bin
@@ -40,7 +34,8 @@ RUN wget -q ${TG_URI}/v${TG_VER}/terragrunt_linux_amd64 \
  && mv terragrunt_linux_amd64 terragrunt && chmod +x terragrunt \
  && rm SHA256SUMS
 
-WORKDIR /tmp
+# Working directory
+WORKDIR /opt
 
 # Install glibc compatibility for the AWS CLI v2
 ARG GLIBC_VERSION=2.31-r0
@@ -69,7 +64,6 @@ ENV PYTHONUNBUFFERED=1
 RUN apk add --no-cache --update python3
 
 # Getting Google Cloud CLI
-WORKDIR /opt
 RUN wget -q https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz \
  && tar xf google-cloud-sdk.tar.gz \
  && rm google-cloud-sdk.tar.gz
