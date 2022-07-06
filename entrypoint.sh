@@ -6,10 +6,8 @@
 # Add Google Cloud SDK bin directory to the PATH
 export PATH="/opt/google-cloud-sdk/bin:${PATH}"
 
-# Change current working directory to live
-# and pass arguments if any
-if [ -d /code/live ]; then
-  cd /code/live || exec "$@"
-else
-  exec "$@"
-fi
+# Change current directory
+cd /code/live
+
+# Pass arguments if any
+exec "$@"

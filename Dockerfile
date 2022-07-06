@@ -68,8 +68,11 @@ RUN wget -q https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz \
  && tar xf google-cloud-sdk.tar.gz \
  && rm google-cloud-sdk.tar.gz
 
-# Switch current user to a regular one
+# Switch user
 USER ${USER}
+
+# Working directory
+WORKDIR /opt
 
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
