@@ -2,18 +2,14 @@
 # 
 locals {
   # automatically load account-level variables
-  account_vars         = read_terragrunt_config(find_in_parent_folders("account.hcl", "fallback.hcl"))
-  aws_profile          = local.account_vars.locals.aws_profile
-  aws_profile_fallback = local.aws_profile == "" ? "default" : local.aws_profile
-  gcp_project          = local.account_vars.locals.gcp_project
-  gcp_project_fallback = local.gcp_project == "" ? "acme" : local.gcp_project
+  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl", "fallback.hcl"))
+  aws_profile = local.account_vars.locals.aws_profile == "" ? "acme" : local.account_vars.locals.aws_profile
+  gcp_project = local.account_vars.locals.gcp_project == "" ? "default" : local.account_vars.locals.gcp_project
 
   # automatically load region-level variables
-  region_vars         = read_terragrunt_config(find_in_parent_folders("region.hcl", "fallback.hcl"))
-  aws_region          = local.region_vars.locals.aws_region
-  aws_region_fallback = local.aws_region == "" ? "us-east-1" : local.aws_region
-  gcp_region          = local.region_vars.locals.gcp_region
-  gcp_region_fallback = local.gcp_region == "" ? "us-west1" : local.gcp_region
+  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl", "fallback.hcl"))
+  aws_region = local.region_vars.locals.aws_region == "" ? "us-east-1" : local.region_vars.locals.aws_region
+  gcp_region = local.region_vars.locals.gcp_region == "" ? "us-west1" : local.region_vars.locals.gcp_region
 
   # automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl", "fallback.hcl"))
@@ -36,7 +32,7 @@ generate "versions" {
   if_exists = "overwrite_terragrunt"
   contents  = <<-EOF
     terraform {
-      required_version = "1.2.2"
+      required_version = "~>1.2.2"
 
       required_providers {
         aws = {
@@ -57,8 +53,8 @@ generate "providers" {
   if_exists = "overwrite_terragrunt"
   contents  = <<-EOF
     provider "aws" {
-      region = "${local.aws_region_fallback}"
-      profile = "${local.aws_profile_fallback}"
+      region = "${local.aws_region}"
+      profile = "${local.aws_profile}"
       insecure = false
       default_tags {
         tags = {
@@ -72,8 +68,8 @@ generate "providers" {
       #skip_credentials_validation = true
     }
     provider "google" {
-      region = "${local.gcp_region_fallback}"
-      project = "${local.gcp_project_fallback}"
+      region = "${local.gcp_region}"
+      project = "${local.gcp_project}"
     }
   EOF
 }

@@ -14,7 +14,10 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
+    project = local.gcp_project
+    location = "us"
     bucket = "${local.gcp_project}-terraform-state"
     skip_bucket_versioning = false
+    prefix = "${basename(get_parent_terragrunt_dir())}/${path_relative_to_include()}"
   }
 }
