@@ -1,3 +1,4 @@
 # Ignore everything
 **
+# except entrypoint.sh
 !entrypoint.sh

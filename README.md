@@ -2,6 +2,7 @@
 
 Multi-Cloud Infrastructure as Code bootstrap repository
 
+
 ## Motivation
 
 Every time when you start a new IaC project, you have to answer a lot of
@@ -17,11 +18,14 @@ because the code for different cloud providers is various due to different
 resources and their specifics. Anyway you still be able to use the same syntax,
 constructions, and code style for it.
 
+
 ## Features
 
 * Easiest way to start your project from scratch
 * A tons of documentation inside
 * Minimum requirements - you only need docker installed
+* CI/CD
+* Multi-account terraform state
 
 
 ## Structure
@@ -45,6 +49,11 @@ constructions, and code style for it.
 * run *make build* to build docker image with required utilities
 * add some code
 * run *make plan* to evaluate terraform intentions
+
+
+## Scaling
+This section will describe the scaling strategies, that can be applied
+in a fast-growing team.
 
 ## Feedback
 

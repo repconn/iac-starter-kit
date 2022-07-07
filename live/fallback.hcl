@@ -2,8 +2,8 @@
 # the remote state bucket in the root terragrunt.hcl configuration.
 locals {
   aws_profile = ""
-  aws_region = ""
+  aws_region  = ""
   gcp_project = ""
-  gcp_region = ""
+  gcp_region  = ""
   environment = ""
 }

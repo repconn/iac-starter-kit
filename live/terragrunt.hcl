@@ -2,30 +2,29 @@
 # 
 locals {
   # automatically load account-level variables
-  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl", "fallback.hcl"))
-  aws_profile = local.account_vars.locals.aws_profile
+  account_vars         = read_terragrunt_config(find_in_parent_folders("account.hcl", "fallback.hcl"))
+  aws_profile          = local.account_vars.locals.aws_profile
   aws_profile_fallback = local.aws_profile == "" ? "default" : local.aws_profile
-  gcp_project = local.account_vars.locals.gcp_project
+  gcp_project          = local.account_vars.locals.gcp_project
   gcp_project_fallback = local.gcp_project == "" ? "acme" : local.gcp_project
 
   # automatically load region-level variables
-  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl", "fallback.hcl"))
-  aws_region = local.region_vars.locals.aws_region
+  region_vars         = read_terragrunt_config(find_in_parent_folders("region.hcl", "fallback.hcl"))
+  aws_region          = local.region_vars.locals.aws_region
   aws_region_fallback = local.aws_region == "" ? "us-east-1" : local.aws_region
-  gcp_region = local.region_vars.locals.gcp_region
+  gcp_region          = local.region_vars.locals.gcp_region
   gcp_region_fallback = local.gcp_region == "" ? "us-west1" : local.gcp_region
 
   # automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl", "fallback.hcl"))
-  env = local.environment_vars.locals.environment
+  env              = local.environment_vars.locals.environment
 }
 
-# Global parameters. These variables apply to all configurations in this
-# subfolder. These are automatically merged into the child terragrunt.hcl
-# config via the include block.
-# Configure root level variables that all resources can inherit. This is
-# especially helpful with multi-account configs where terraform_remote_state
-# data sources are placed directly into the modules.
+# These variables apply to all configurations in this subfolder.
+# These are automatically merged into the child `terragrunt.hcl` config
+# via the include block. Configure root level variables that all resources
+# can inherit. This is especially helpful with multi-account configs where
+# terraform_remote_state data sources are placed directly into the modules.
 inputs = merge(
   local.account_vars.locals,
   local.region_vars.locals,
@@ -33,11 +32,11 @@ inputs = merge(
 )
 
 generate "versions" {
-  path = "_versions.tf"
+  path      = "_versions.tf"
   if_exists = "overwrite_terragrunt"
-  contents = <<-EOF
+  contents  = <<-EOF
     terraform {
-      required_version = "1.2.4"
+      required_version = "1.2.2"
 
       required_providers {
         aws = {
@@ -54,9 +53,9 @@ generate "versions" {
 }
 
 generate "providers" {
-  path = "_providers.tf"
+  path      = "_providers.tf"
   if_exists = "overwrite_terragrunt"
-  contents = <<-EOF
+  contents  = <<-EOF
     provider "aws" {
       region = "${local.aws_region_fallback}"
       profile = "${local.aws_profile_fallback}"
@@ -66,6 +65,11 @@ generate "providers" {
           Terraform = true
         }
       }
+      # make it faster by skipping some checks
+      #skip_get_ec2_platforms = true
+      #skip_metadata_api_check = true
+      #skip_region_validation = true
+      #skip_credentials_validation = true
     }
     provider "google" {
       region = "${local.gcp_region_fallback}"
@@ -96,7 +100,7 @@ terraform {
   # Create cache dir to store downloaded modules and dependencies
   before_hook "before_cache" {
     commands = [get_terraform_command()]
-    execute = ["mkdir", "-p", abspath("${get_parent_terragrunt_dir()}/../_cache")]
+    execute  = ["mkdir", "-p", abspath("${get_parent_terragrunt_dir()}/../_cache")]
   }
 
   # Tell Terraform to use cache directory
@@ -110,6 +114,6 @@ terraform {
   # Execute "init" before "plan" every time
   before_hook "before_hook" {
     commands = ["plan"]
-    execute = ["terraform", "init"]
+    execute  = ["terraform", "init"]
   }
 }

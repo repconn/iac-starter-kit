@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 # Load Google Cloud SDK completions
+# shellcheck source=/dev/null
 . /opt/google-cloud-sdk/path.bash.inc
 
 # Add Google Cloud SDK bin directory to the PATH
