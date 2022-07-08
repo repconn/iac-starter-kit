@@ -1,3 +1,3 @@
 # Modules
 
-This directory contain modules
+The directory contain infrastructure modules
