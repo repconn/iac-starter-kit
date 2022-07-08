@@ -16,7 +16,7 @@ No matter what cloud provider you are using, you will keep all of your code
 files in one place. In fact this is not a real cloud-agnostic solution,
 because the code for different cloud providers is various due to different
 resources and their specifics. Anyway you still be able to use the same syntax,
-constructions, and code style for it.
+constructions and code style.
 
 
 ## Features
@@ -26,6 +26,7 @@ constructions, and code style for it.
 * Minimum requirements - you only need docker installed
 * CI/CD
 * Multi-account terraform state
+* Scaffolding support (creating new account from template, modular system)
 
 
 ## Structure
