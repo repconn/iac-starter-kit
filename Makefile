@@ -21,6 +21,16 @@ else ifeq (newgcp,$(firstword $(MAKECMDGOALS)))
     endif
     # and turn them into do-nothing targets
     $(eval $(ACCOUNT_NAME):;@:)
+# if the first argument is "newmod"
+else ifeq (newmod,$(firstword $(MAKECMDGOALS)))
+    # use the rest as arguments for "newmod"
+    MODULE_NAME := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+    # fail if MODULE_NAME is not defined
+    ifndef MODULE_NAME
+        $(error ❌ MODULE_NAME is not set)
+    endif
+    # and turn them into do-nothing targets
+    $(eval $(MODULE_NAME):;@:)
 endif
 
 newaws: ## bootstrap new AWS account
@@ -40,6 +50,11 @@ newgcp: ## bootstrap new GCP account
 	cp templates/gcp/README.md live/gcp-$(ACCOUNT_NAME)/README.md
 	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/region.hcl < templates/gcp/region.hcl >/dev/null
 	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/{common,dev,stage,prod}/environment.hcl < templates/gcp/environment.hcl >/dev/null
+
+newmod: ## bootstrap new module
+	echo 🧩 Bootstrapping the new infrastructure module $(MODULE_NAME)
+	mkdir -p modules/$(MODULE_NAME)
+	touch modules/$(MODULE_NAME)/{main,variables,outputs}.tf
 
 build: ## build toolbox container
 	@docker build --no-cache --pull -t iac .
