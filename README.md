@@ -1,11 +1,11 @@
-# IaC Bootstrap
+# Terraform Bootstrap
 
 Multi-Cloud Infrastructure as Code bootstrap repository
 
 
 ## Motivation
 
-Every time when you start a new IaC project, you have to answer a lot of
+Every time when you start a new IaC project you have to answer a lot of
 questions - how to organize your code files? how to manage state-files?
 do I have to run terraform locally or do I need a CI server for that?
 There are no standardized way to organize your code.
@@ -22,9 +22,9 @@ constructions and code style.
 ## Features
 
 * Easiest way to start your project from scratch
-* A tons of documentation inside
-* Minimum requirements - you only need docker installed
-* CI/CD
+* Everything is documented
+* Minimum requirements - you only need docker installed on your machine
+* CI/CD pipelines included
 * Multi-account terraform state
 * Scaffolding support (creating new account from template, modular system)
 
@@ -50,6 +50,12 @@ constructions and code style.
 * run *make build* to build docker image with required utilities
 * add some code
 * run *make plan* to evaluate terraform intentions
+
+
+## Scaffolding abilities
+
+* make newaws <account-name>
+* make newgcp <account-name>
 
 
 ## Scaling
