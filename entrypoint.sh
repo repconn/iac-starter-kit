@@ -8,7 +8,7 @@
 export PATH="/opt/google-cloud-sdk/bin:${PATH}"
 
 # Change current directory
-cd /code/live || true
+cd /code/live &>/dev/null || true
 
 # Pass arguments if any
 exec "$@"
