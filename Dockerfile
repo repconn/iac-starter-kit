@@ -5,7 +5,7 @@ FROM alpine:3.16.0
 
 # Versions of binaries included in image
 # terraform
-ARG TF_VER=1.2.4
+ARG TF_VER=1.2.5
 # terragrunt
 ARG TG_VER=0.38.3
 
