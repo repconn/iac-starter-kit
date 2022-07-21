@@ -57,19 +57,22 @@ newmod: ## bootstrap new module
 	touch modules/$(MODULE_NAME)/{main,variables,outputs}.tf
 
 build: ## build toolbox container
-	@docker build --no-cache --pull -t iac .
+	docker build --no-cache --pull -t iac .
 
 clean: ## clean docker stuff
-	@docker system prune -f
+	docker system prune -f
 
 plan: ## run terraform plan
-	@docker run -it --rm \
+	docker run -it --rm \
 		-v `pwd`:/code \
 		-v $$HOME/.aws:/home/user/.aws \
 		iac terragrunt run-all plan
 
-shell: ## start shell
-	@docker run -it --rm -v `pwd`:/code iac sh
+shell: ## start container shell
+	docker run -it --rm -v `pwd`:/code iac sh
+
+check: ## run pre-commit linter
+	pre-commit run -a || echo "pre-commit missing"
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
