@@ -9,11 +9,6 @@ ARG TF_VER=1.2.5
 # terragrunt
 ARG TG_VER=0.38.3
 
-# Run the container as a non-root user
-ARG GROUP=user
-ARG USER=user
-RUN adduser -s /bin/bash -D ${USER}
-
 # Working directory
 WORKDIR /usr/local/bin
 
@@ -68,11 +63,10 @@ RUN wget -q https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz \
  && tar xf google-cloud-sdk.tar.gz \
  && rm google-cloud-sdk.tar.gz
 
-# Switch user
+# Run the container as a non-root user
+ARG USER=user
+RUN adduser -s /bin/bash -D ${USER}
 USER ${USER}
-
-# Working directory
-WORKDIR /opt
 
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
