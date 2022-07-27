@@ -4,7 +4,7 @@
 
 Multi-Cloud Infrastructure as Code bootstrap repository
 
-![](_assets/tfntg.jpeg)
+![](_assets/logo.png)
 
 
 ## Motivation
