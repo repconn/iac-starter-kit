@@ -40,7 +40,9 @@ newaws: ## bootstrap new AWS account
 	mkdir -p live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/{common,dev,stage,prod}
     # copying files into account directory
 	cp templates/aws/account.hcl live/aws-$(ACCOUNT_NAME)/account.hcl
-	cp templates/aws/README.md live/aws-$(ACCOUNT_NAME)/README.md
+	cp templates/aws/README-account.md live/aws-$(ACCOUNT_NAME)/README.md
+	cp templates/aws/README-global.md live/aws-$(ACCOUNT_NAME)/global/README.md
+	tee live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/README.md < templates/aws/README-region.md >/dev/null
 	tee live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/region.hcl < templates/aws/region.hcl >/dev/null
 	tee live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/{common,dev,stage,prod}/environment.hcl < templates/aws/environment.hcl >/dev/null
     # put correct region and environment into configuration files
@@ -65,7 +67,9 @@ newgcp: ## bootstrap new GCP account
 	mkdir -p live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/{common,dev,stage,prod}
     # copying files into account directory
 	cp templates/gcp/account.hcl live/gcp-$(ACCOUNT_NAME)/account.hcl
-	cp templates/gcp/README.md live/gcp-$(ACCOUNT_NAME)/README.md
+	cp templates/gcp/README-account.md live/gcp-$(ACCOUNT_NAME)/README.md
+	cp templates/gcp/README-global.md live/gcp-$(ACCOUNT_NAME)/global/README.md
+	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/README.md < templates/gcp/README-region.md >/dev/null
 	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/region.hcl < templates/gcp/region.hcl >/dev/null
 	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/{common,dev,stage,prod}/environment.hcl < templates/gcp/environment.hcl >/dev/null
     # put correct region and environment into configuration files
@@ -86,6 +90,7 @@ newmod: ## bootstrap new module
 	echo 🧩 Bootstrapping the new infrastructure module $(MODULE_NAME)
 	mkdir -p modules/$(MODULE_NAME)
 	touch modules/$(MODULE_NAME)/{main,variables,outputs}.tf
+	echo "# $(MODULE_NAME) module" > modules/$(MODULE_NAME)/README.md
 
 build: ## build toolbox container
 	docker build --no-cache --pull -t iactools .

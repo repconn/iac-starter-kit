@@ -1,8 +1,10 @@
-![](_assets/tfntg.png)
+[![XI](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml)
 
 # Terraform Bootstrap
 
 Multi-Cloud Infrastructure as Code bootstrap repository
+
+![](_assets/tfntg.jpeg)
 
 
 ## Motivation
@@ -37,15 +39,17 @@ constructions and code style.
     * [live/aws-acme](live/aws-acme/README.md) *AWS account #1*
         * [live/aws-acme/global](live/aws-acme/global/README.md) *region-independent services*
         * [live/aws-acme/us-east-1](live/aws-acme/us-east-1/README.md) *region specific*
-    * [live/gcp-foobar](live/gcp-foobar/README.md) *Google account #1*
-        * [live/gcp-foobar/global](live/gcp-foobar/global/README.md) *region-independent services*
-        * [live/gcp-foobar/us-west1](live/gcp-foobar/us-west1/README.md) *region specific*
+    * [live/gcp-foobar](#nonexistent) *Google account #1*
+        * [live/gcp-foobar/global](#nonexistent) *region-independent services*
+        * [live/gcp-foobar/us-west1](#nonexistent) *region specific*
 * [modules](modules/README.md) *community modules, infrastructure micro-modules*
     * [modules/aws-data](modules/aws-data/README.md) *example of AWS specific module*
-    * [modules/gcp-data](modules/gcp-data/README.md) *example of Google specific module*
+    * [modules/gcp-data](#nonexistent) *example of Google specific module*
 
 
 ## Quick start
+
+![](_assets/demo.gif)
 
 * clone the repository
 * check nested *terragrunt.hcl* files for correct settings
@@ -54,10 +58,11 @@ constructions and code style.
 * run *make plan* to evaluate terraform intentions
 
 
-## Scaffolding abilities
+## Scaffolding options
 
-* make newaws <account-name>
-* make newgcp <account-name>
+* `make newaws <account-name>`. Creating a new account dir with AWS-specific setting
+* `make newgcp <account-name>`. Creating a new account dir with Google-specific settings
+* `make newmod <module-name>`. Creating a new infra-module directory
 
 
 ## Scaling
