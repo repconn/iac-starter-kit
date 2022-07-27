@@ -1,7 +1,8 @@
 # Account-level variables. These are automatically pulled in to configure
 # the remote state bucket in the root terragrunt.hcl configuration.
 locals {
-  aws_profile = "default"
+  aws_profile = "rfc4251"
+  gcp_project = ""
 }
 
 # Configure Terragrunt to automatically create an encrypted S3 bucket
@@ -10,7 +11,7 @@ remote_state {
   backend = "s3"
 
   generate = {
-    path      = "_backend-aws.tf"
+    path      = "_backend.tf"
     if_exists = "overwrite_terragrunt"
   }
   config = {

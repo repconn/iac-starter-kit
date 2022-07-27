@@ -1,3 +1,3 @@
 # AWS account
 
-This is a separate AWS account, that have its own backend
+This is a separate AWS account, that have its own backend.

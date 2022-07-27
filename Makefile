@@ -35,37 +35,52 @@ endif
 
 newaws: ## bootstrap new AWS account
 	echo 🧩 Bootstrapping the new AWS account $(ACCOUNT_NAME)
+    # creating the base directory structure
 	mkdir -p live/aws-$(ACCOUNT_NAME)/global
 	mkdir -p live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/{common,dev,stage,prod}
+    # copying files into account directory
 	cp templates/aws/account.hcl live/aws-$(ACCOUNT_NAME)/account.hcl
 	cp templates/aws/README.md live/aws-$(ACCOUNT_NAME)/README.md
 	tee live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/region.hcl < templates/aws/region.hcl >/dev/null
 	tee live/aws-$(ACCOUNT_NAME)/{us-east-1,us-west-2}/{common,dev,stage,prod}/environment.hcl < templates/aws/environment.hcl >/dev/null
+    # put correct region and environment into configuration files
 	for region in us-east-1 us-west-2; do \
-		sed -ibak "s/\"\"/\"$${region}\"/g" "live/aws-$(ACCOUNT_NAME)/$${region}/region.hcl"; \
+		sed -ibak "s/awsdefault/$${region}/g" "live/aws-$(ACCOUNT_NAME)/$${region}/region.hcl"; \
+		sed -ibak "s/gcpdefault//g" "live/aws-$(ACCOUNT_NAME)/$${region}/region.hcl"; \
 		rm "live/aws-$(ACCOUNT_NAME)/$${region}/region.hclbak"; \
 		for env in dev stage prod; do \
 			sed -ibak "s/N\/A/$${env}/g" "live/aws-$(ACCOUNT_NAME)/$${region}/$${env}/environment.hcl"; \
 			rm "live/aws-$(ACCOUNT_NAME)/$${region}/$${env}/environment.hclbak"; \
 		done \
 	done
+    # replacing account-level variables
+	sed -ibak "s/awsdefault/$(ACCOUNT_NAME)/g" live/aws-$(ACCOUNT_NAME)/account.hcl
+	sed -ibak "s/gcpdefault//g" live/aws-$(ACCOUNT_NAME)/account.hcl
+	rm live/aws-$(ACCOUNT_NAME)/account.hclbak
 
 newgcp: ## bootstrap new GCP account
 	echo 🧩 Bootstrapping the new Google Cloud account $(ACCOUNT_NAME)
+    # creating the base directory structure
 	mkdir -p live/gcp-$(ACCOUNT_NAME)/global
 	mkdir -p live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/{common,dev,stage,prod}
+    # copying files into account directory
 	cp templates/gcp/account.hcl live/gcp-$(ACCOUNT_NAME)/account.hcl
 	cp templates/gcp/README.md live/gcp-$(ACCOUNT_NAME)/README.md
 	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/region.hcl < templates/gcp/region.hcl >/dev/null
 	tee live/gcp-$(ACCOUNT_NAME)/{us-east2,us-west1}/{common,dev,stage,prod}/environment.hcl < templates/gcp/environment.hcl >/dev/null
+    # put correct region and environment into configuration files
 	for region in us-east2 us-west1; do \
-		sed -ibak "s/\"\"/\"$${region}\"/g" "live/gcp-$(ACCOUNT_NAME)/$${region}/region.hcl"; \
+		sed -ibak "s/gcpdefault/$${region}/g" "live/gcp-$(ACCOUNT_NAME)/$${region}/region.hcl"; \
+		sed -ibak "s/awsdefault//g" "live/gcp-$(ACCOUNT_NAME)/$${region}/region.hcl"; \
 		rm "live/gcp-$(ACCOUNT_NAME)/$${region}/region.hclbak"; \
 		for env in dev stage prod; do \
 			sed -ibak "s/N\/A/$${env}/g" "live/gcp-$(ACCOUNT_NAME)/$${region}/$${env}/environment.hcl"; \
 			rm "live/gcp-$(ACCOUNT_NAME)/$${region}/$${env}/environment.hclbak"; \
 		done \
 	done
+	sed -ibak "s/gcpdefault/$(ACCOUNT_NAME)/g" live/gcp-$(ACCOUNT_NAME)/account.hcl
+	sed -ibak "s/awsdefault//g" live/gcp-$(ACCOUNT_NAME)/account.hcl
+	rm live/gcp-$(ACCOUNT_NAME)/account.hclbak
 
 newmod: ## bootstrap new module
 	echo 🧩 Bootstrapping the new infrastructure module $(MODULE_NAME)
@@ -95,4 +110,4 @@ help:
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: newaws newgcp
+.PHONY: newaws newgcp newmod
