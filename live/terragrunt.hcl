@@ -3,7 +3,7 @@
 locals {
   # automatically load account-level variables
   account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl", "fallback.hcl"))
-  aws_profile = local.account_vars.locals.aws_profile == "" ? "acme" : local.account_vars.locals.aws_profile
+  aws_profile = local.account_vars.locals.aws_profile == "" ? "default" : local.account_vars.locals.aws_profile
   gcp_project = local.account_vars.locals.gcp_project == "" ? "default" : local.account_vars.locals.gcp_project
 
   # automatically load region-level variables

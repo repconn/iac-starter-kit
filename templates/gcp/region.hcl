@@ -1,5 +1,5 @@
 # Common variables for the region. This is automatically pulled in in the root
 # terragrunt.hcl configuration to configure the remote state bucket.
 locals {
-  _region = "us-west1"
+  gcp_region = ""
 }
