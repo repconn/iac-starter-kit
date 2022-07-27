@@ -1,4 +1,4 @@
-[![XI](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml)
+[![CI](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml)
 
 # Terraform Bootstrap
 
