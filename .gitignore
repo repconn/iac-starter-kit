@@ -85,7 +85,7 @@ terraform.rc
 .terragrunt-cache
 .terraform.lock.hcl
 _cache
-_profiders.tf
+_providers.tf
 _versions.tf
 
 # End of https://gitignore.io/api/linux,osx,terraform
