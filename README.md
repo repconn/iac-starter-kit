@@ -1,8 +1,8 @@
-[![CI](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/terraform-bootstrap/actions/workflows/CI.yml)
+[![CI](https://github.com/repconn/infracode-boilerplate/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/infracode-boilerplate/actions/workflows/CI.yml)
 
-# Terraform Bootstrap
+# Infrastructure code boilerplate
 
-Multi-Cloud Infrastructure as Code bootstrap repository
+Multi-Cloud Infrastructure as Code boilerplate repository
 
 ![](_assets/logo.png)
 
@@ -16,8 +16,10 @@ There are no standardized way to organize your code.
 This repository serves as a starting point for your Infrastructure as Code
 based on [Terraform](https://terraform.io) and [Terragrunt](https://terragrunt.gruntwork.io/).
 
-No matter what cloud provider you are using, you will keep all of your code
-files in one place. In fact this is not a real cloud-agnostic solution,
+No matter what cloud provider you are using Amazon Web Services or Google Cloud Platform,
+you will keep all of your code files in one place.
+
+> In fact this is not a real cloud-agnostic solution,
 because the code for different cloud providers is various due to different
 resources and their specifics. Anyway you still be able to use the same syntax,
 constructions and code style.
@@ -25,12 +27,11 @@ constructions and code style.
 
 ## Features
 
-* Easiest way to start your project from scratch
-* Everything is documented
+* Easiest way to start your IaC project from scratch
+* Create a new AWS or GCP account from template
 * Minimum requirements - you only need docker installed on your machine
-* CI/CD pipelines included
+* CI/CD pipelines
 * Multi-account terraform state
-* Scaffolding support (creating new account from template, modular system)
 
 
 ## Structure
@@ -51,23 +52,18 @@ constructions and code style.
 
 ![](_assets/demo.gif)
 
-* clone the repository
-* check nested *terragrunt.hcl* files for correct settings
-* run *make build* to build docker image with required utilities
-* add some code
-* run *make plan* to evaluate terraform intentions
+* Check out the repository
+* Configure *terragrunt.hcl* files for correct settings
+* Run once *make build* to build docker image with required utilities
+* Run *make plan* every time to evaluate terraform intentions
 
 
-## Scaffolding options
+## Makefile options
 
 * `make newaws <account-name>`. Creating a new account dir with AWS-specific setting
 * `make newgcp <account-name>`. Creating a new account dir with Google-specific settings
 * `make newmod <module-name>`. Creating a new infra-module directory
 
-
-## Scaling
-This section will describe the scaling strategies, that can be applied
-in a fast-growing team.
 
 ## Feedback
 
