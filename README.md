@@ -1,6 +1,6 @@
 [![CI](https://github.com/repconn/infracode-boilerplate/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/infracode-boilerplate/actions/workflows/CI.yml)
 
-# Infrastructure code boilerplate
+# 🧱 Infrastructure code boilerplate
 
 Multi-Cloud Infrastructure as Code boilerplate repository
 
