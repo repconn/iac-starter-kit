@@ -27,6 +27,8 @@ constructions and code style.
 
 ## Features
 
+* Use with any part of infrastructure
+* Cover all the services or only the one
 * Easiest way to start your IaC project from scratch
 * Create a new AWS or GCP account from template
 * Minimum requirements - you only need docker installed on your machine
