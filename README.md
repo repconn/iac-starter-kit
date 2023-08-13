@@ -1,4 +1,4 @@
-[![CI](https://github.com/repconn/infracode-boilerplate/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/repconn/infracode-boilerplate/actions/workflows/CI.yml)
+[![CI](https://github.com/exdial/iac-starter-kit/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/exdial/iac-starter-kit/actions/workflows/CI.yml)
 
 # Infrastructure as Code starter kit
 Multi-Cloud Infrastructure as Code boilerplate repository
@@ -49,10 +49,20 @@ constructions and code style.
 * Run once *make build* to build docker image with required utilities
 * Run *make plan* every time to evaluate terraform intentions
 
+## Terraform best practices
+* Manipulate state only through Terraform/Terragrunt commands, do not edit JSON directly
+* Always set up a shared remote storage
+* Use state locking
+* Back up your state file
+* Use one state per environment
+* Host Terraform/Terragrunt scripts in git repository
+* Use continuous integration for Terraform code
+* Apply Terraform code only through CD pipeline
+
 ## Makefile options
 * `make newaws <account-name>`. Creating a new account dir with AWS-specific setting
 * `make newgcp <account-name>`. Creating a new account dir with Google-specific settings
 * `make newmod <module-name>`. Creating a new infra-module directory
 
 ## Feedback
-[Suggestions and improvements](https://github.com/repconn/iac-starter-kit/issues)
+[Suggestions and improvements](https://github.com/exdial/iac-starter-kit/issues)
