@@ -1,8 +1,9 @@
-[![CI](https://github.com/exdial/iac-starter-kit/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/exdial/iac-starter-kit/actions/workflows/CI.yml)
+[![tests](https://github.com/exdial/iac-starter-kit/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/exdial/iac-starter-kit/actions/workflows/tests.yaml)
+[![build-image](https://github.com/exdial/iac-starter-kit/actions/workflows/build-image.yaml/badge.svg?branch=main)](https://github.com/exdial/iac-starter-kit/actions/workflows/build-image.yaml)
 
 # Infrastructure as Code starter kit
 Multi-Cloud Infrastructure as Code boilerplate repository
-![](_assets/logo.png)
+![](.github/images/logo.png)
 
 ## Motivation
 Every time when you start a new IaC project you have to answer a lot of
@@ -42,7 +43,7 @@ constructions and code style.
     * [modules/gcp-data](#nonexistent) *example of Google specific module*
 
 ## Quick start
-![](_assets/demo.gif)
+![](.github/images/demo.gif)
 
 * Check out the repository
 * Configure *terragrunt.hcl* files for correct settings
