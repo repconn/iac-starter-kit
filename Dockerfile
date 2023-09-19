@@ -1,13 +1,24 @@
-# Alpine Docker image with installed:
+# syntax=docker/dockerfile:1
+
+# Alpine Docker image with
 # terraform, terragrunt
 # awscli, google-cloud-sdk
-FROM alpine:3.16.0
+FROM alpine:3.18.0
+
+ARG IMAGE_CREATE_DATE
+ARG IMAGE_VERSION
+
+# Metadata as defined in OCI image spec annotations
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md
+LABEL org.opencontainers.image.title="cloud-tools" \
+      org.opencontainers.image.description="cloud-tools" \
+      org.opencontainers.image.authors="github.com/exdial" \
+      org.opencontainers.image.created=$IMAGE_CREATE_DATE \
+      org.opencontainers.image.version=$IMAGE_VERSION
 
 # Versions of binaries included in image
-# terraform
-ARG TF_VER=1.2.5
-# terragrunt
-ARG TG_VER=0.38.3
+ARG TF_VER=1.5.7
+ARG TG_VER=0.51.0
 
 # Working directory
 WORKDIR /usr/local/bin
@@ -33,7 +44,7 @@ RUN wget -q ${TG_URI}/v${TG_VER}/terragrunt_linux_amd64 \
 WORKDIR /opt
 
 # Install glibc compatibility for the AWS CLI v2
-ARG GLIBC_VERSION=2.31-r0
+ARG GLIBC_VERSION=2.35-r1
 ARG GLIBC_URI="https://github.com/sgerrand/alpine-pkg-glibc/releases/download"
 RUN wget -q https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -O \
     /etc/apk/keys/sgerrand.rsa.pub \

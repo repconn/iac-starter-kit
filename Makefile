@@ -1,5 +1,6 @@
 .SILENT: # do not echo commands as we run them
 .DEFAULT_GOAL := help
+CURRENT_DATE := $(date '+%Y-%m-%dT%H:%M:%S')
 
 # if the first argument is "newaws"
 ifeq (newaws,$(firstword $(MAKECMDGOALS)))
@@ -93,7 +94,9 @@ newmod: ## bootstrap new module
 	echo "# $(MODULE_NAME) module" > modules/$(MODULE_NAME)/README.md
 
 build: ## build toolbox container
-	docker build --no-cache --pull -t iactools .
+	docker build --no-cache --pull -t cloud-tools . \
+		--build-arg IMAGE_CREATE_DATE=$$CURRENT_DATE \
+		--build-arg IMAGE_VERSION=local
 
 clean: ## clean docker stuff
 	docker system prune -f
@@ -102,10 +105,10 @@ plan: ## run terraform plan
 	docker run -it --rm \
 		-v `pwd`:/code \
 		-v $$HOME/.aws:/home/user/.aws \
-		iactools terragrunt run-all plan
+		cloud-tools terragrunt run-all plan
 
 shell: ## start container shell
-	docker run -it --rm -v `pwd`:/code iactools sh
+	docker run -it --rm -v `pwd`:/code cloud-tools sh
 
 check: ## run pre-commit linter
 	pre-commit run -a || echo "pre-commit missing"
