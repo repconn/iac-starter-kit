@@ -45,4 +45,3 @@ jobs:
         build-args: |
           IMAGE_CREATE_DATE=${{ env.image_create_date }}
           IMAGE_VERSION=${{ env.image_version }}
-
