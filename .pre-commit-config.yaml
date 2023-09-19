@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.3.0
+  rev: v4.4.0
   hooks:
   - id: detect-aws-credentials
     args: [--allow-missing-credentials]
@@ -12,7 +12,7 @@ repos:
   - id: check-case-conflict
   - id: check-merge-conflict
 - repo: git@github.com:exdial/pre-commit-hooks
-  rev: 363a879a45d49886b1d229a075af8ba6b23bfc86
+  rev: v0.0.6
   hooks:
   - id: terraform-validate
   - id: terraform-fmt
