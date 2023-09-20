@@ -94,7 +94,7 @@ newmod: ## bootstrap new module
 	echo "# $(MODULE_NAME) module" > modules/$(MODULE_NAME)/README.md
 
 build: ## build toolbox container
-	docker build --no-cache --pull -t cloud-tools . \
+	docker buildx build -t cloud-tools . \
 		--build-arg IMAGE_CREATE_DATE=$$CURRENT_DATE \
 		--build-arg IMAGE_VERSION=local
 

@@ -4,8 +4,9 @@
 # shellcheck source=/dev/null
 . /opt/google-cloud-sdk/path.bash.inc
 
-# Add Google Cloud SDK bin directory to the PATH
+# Adjust PATH
 export PATH="/opt/google-cloud-sdk/bin:${PATH}"
+export PATH="/opt/aws-cli/bin:${PATH}"
 
 # Change current directory
 cd /code/live > /dev/null 2>&1 || true

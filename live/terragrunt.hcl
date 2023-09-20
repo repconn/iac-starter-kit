@@ -32,7 +32,7 @@ generate "versions" {
   if_exists = "overwrite_terragrunt"
   contents  = <<-EOF
     terraform {
-      required_version = "~>1.2.2"
+      required_version = "~>1.5.7"
 
       required_providers {
         aws = {
