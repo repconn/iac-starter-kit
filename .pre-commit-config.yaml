@@ -11,7 +11,7 @@ repos:
   - id: end-of-file-fixer
   - id: check-case-conflict
   - id: check-merge-conflict
-- repo: git@github.com:exdial/pre-commit-hooks
+- repo: https://github.com/exdial/pre-commit-hooks
   rev: v0.0.7
   hooks:
   - id: terraform-validate
