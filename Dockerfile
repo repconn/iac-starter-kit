@@ -9,6 +9,7 @@ ARG TERRAFORM_VERSION=${TERRAFORM_VERSION:-latest}
 ARG TERRAGRUNT_VERSION=${TERRAGRUNT_VERSION:-latest}
 ARG PACKER_VERSION=${PACKER_VERSION:-latest}
 ARG AWSCLI_VERSION=${AWSCLI_VERSION:-latest}
+ARG HELM_VERSION=${HELM_VERSION:-latest}
 
 # URLs
 ARG HASHICORP_URL="https://releases.hashicorp.com"
@@ -16,6 +17,9 @@ ARG GRUNTWORK_URL="https://github.com/gruntwork-io/terragrunt/releases/download"
 ARG HASHICORP_API="https://api.github.com/repos/hashicorp"
 ARG GRUNTWORK_API="https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest"
 ARG AWSCLI_API="https://api.github.com/repos/aws/aws-cli/tags"
+ARG HELM_URL="https://get.helm.sh"
+ARG HELM_API="https://api.github.com/repos/helm/helm/releases/latest"
+
 
 # Working directory
 WORKDIR /opt
@@ -70,6 +74,17 @@ RUN : && \
  && grep packer_${PACKER_VERSION}_linux_amd64.zip packer_${PACKER_VERSION}_SHA256SUMS | \
   sha256sum -c - && unzip packer_${PACKER_VERSION}_linux_amd64.zip && chmod +x packer
 
+# Getting Helm
+RUN : && \
+ if [ "${HELM_VERSION}" = "latest" ]; then \
+  HELM_VERSION="$(wget -qO- ${HELM_API} | jq -r .tag_name | tr -d 'v')" \
+ ; fi \
+ && wget -q ${HELM_URL}/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+ && wget -q ${HELM_URL}/helm-v${HELM_VERSION}-linux-amd64.tar.gz.sha256sum \
+ && grep helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+  helm-v${HELM_VERSION}-linux-amd64.tar.gz.sha256sum | sha256sum -c - \
+ && tar xfz helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+ && mv linux-amd64/helm . && chmod +x helm
 
 # STAGE 2: final
 FROM alpine:${ALPINE_VERSION}
@@ -98,6 +113,7 @@ COPY --from=builder /opt/google-cloud-sdk/ /opt/google-cloud-sdk/
 COPY --from=builder /usr/local/bin/terraform /usr/local/bin/terraform
 COPY --from=builder /usr/local/bin/terragrunt /usr/local/bin/terragrunt
 COPY --from=builder /usr/local/bin/packer /usr/local/bin/packer
+COPY --from=builder /usr/local/bin/helm /usr/local/bin/helm
 COPY entrypoint.sh /usr/local/bin/
 
 # Run the container as a non-root user
