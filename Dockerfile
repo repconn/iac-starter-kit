@@ -103,9 +103,10 @@ LABEL org.opencontainers.image.title="cloud-tools" \
 # Working directory
 WORKDIR /opt
 
-# Install python3 for Google Cloud CLI
+# Install python3 required for Google Cloud CLI and Ansible,
+# and groff required for AWS CLI
 ENV PYTHONUNBUFFERED=1
-RUN apk add --no-cache --update python3 groff
+RUN apk add --no-cache --update python3 groff ansible
 
 # Copy binaries
 COPY --from=builder /opt/aws-cli/ /opt/aws-cli/
