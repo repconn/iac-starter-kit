@@ -122,4 +122,6 @@ ARG USER=user
 RUN adduser -s /bin/bash -D ${USER}
 USER ${USER}
 
+WORKDIR /home/${USER}
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
